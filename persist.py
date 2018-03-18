@@ -1,9 +1,12 @@
 import pickle
 import os
 
+directory = 'recipes'
 savedLoc = 'recipes/saved.pkl';
 
 def getSaved():
+    if not os.path.exists(directory):
+        os.makedirs(directory)
     if not os.path.isfile(savedLoc):
         cfile = open(savedLoc, 'wb')
         a= {}
