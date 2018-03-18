@@ -1,0 +1,10 @@
+(dp0
+Vtest
+p1
+Vhttps://stackoverflow.com/questions/26835477/pickle-load-variable-if-exists-or-create-and-save-it
+p2
+sVmysite
+p3
+Vhttps://www.tutorialspoint.com/python/time_sleep.htm
+p4
+s.
