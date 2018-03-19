@@ -1,8 +1,13 @@
 import webbrowser
 import persist
 import check_url
+import recent
 
-def get_response(command):
+def open_browser(url, channel, user):
+    webbrowser.open(url, new=2)
+    recent.commit(url, user, channel)
+
+def get_response(command, channel, user):
     """
         Executes bot command if the command is known
     """
@@ -15,12 +20,12 @@ def get_response(command):
         if favUrl is None:
             url = openString[1:-1]
             if check_url.check_url(url):
-                webbrowser.open(url, new=2)
+                open_browser(url, channel, user)
                 return "Opening, {}!".format(url)
             
             return "I don't recognise {}".format(openString)
         else:
-            webbrowser.open(favUrl, new=2)
+            open_browser(favUrl, channel, user)
             return "ok, opening {}".format(openString)
     if command.startswith('save'):
         parts = command.split(' ')
@@ -32,6 +37,8 @@ def get_response(command):
             return "Saving {} as '{}'!".format(url, name)
         else:
             return "Cannot set invalid url"
+    if command.startswith('show recent'):
+        return recent.pretty_print()
     
     # Default response is help text for the user
     return "Not sure what you mean. Try *{}*.".format('hi bot')

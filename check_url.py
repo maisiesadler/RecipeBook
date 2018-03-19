@@ -21,7 +21,7 @@ def check_url(url):
     We only check the URL header.
     """
     server_status = get_server_status_code(url)
-    print("checking '{}', got {}".format(url, server_status))
+    print("checking url '{}', got {}".format(url, server_status))
     # see also http://stackoverflow.com/questions/2924422
     good_codes = [httplib.OK, httplib.FOUND, httplib.MOVED_PERMANENTLY]
     return server_status in good_codes

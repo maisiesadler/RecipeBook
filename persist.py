@@ -9,7 +9,7 @@ def getSaved():
         os.makedirs(directory)
     if not os.path.isfile(savedLoc):
         cfile = open(savedLoc, 'wb')
-        a= {}
+        a = {}
         pickle.dump(a, cfile)
         cfile.close()
     file2 = open(savedLoc, 'rb')
@@ -30,6 +30,6 @@ def getSavedRecipe(name):
         return saved[name]
     else:
         return None
-
+    
 #saveRecipe('cheese', 'testing')
 #print(getSaved())
