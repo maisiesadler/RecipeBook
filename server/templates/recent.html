@@ -1,0 +1,29 @@
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.3/jquery.min.js"></script>
+<script type="text/javascript">
+    function clearRecent(){
+        $.ajax({
+            type: "GET",
+            url: "/clear",
+            success: function (data) {
+                location.reload()
+          },
+        });                
+    }
+ </script>
+
+{% extends "layout.html" %}
+{% block title %}Recent Urls{% endblock %}
+{% block body %}
+    <a href="#" onclick="return clearRecent();">Clear Recent</a>
+  {% for recipe in recentRecipes %}
+  <p>
+      {% if recipe.time %}
+          {{recipe.time.strftime("%Y-%m-%d %H:%M:%S")}} : 
+      {% endif %}
+      {{recipe.url}}
+      {% if recipe.savedName %}
+         <b> (Saved as {{recipe.savedName}})</b>
+      {% endif %}
+  </p>
+  {% endfor %}
+{% endblock %}

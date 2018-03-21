@@ -1,8 +1,8 @@
 import pickle
 import os
 
-directory = 'recipes'
-savedLoc = 'recipes/saved.pkl';
+directory = '/home/pi/recipe_book/recipes'
+savedLoc = '/home/pi/recipe_book/recipes/saved.pkl';
 
 def getSaved():
     if not os.path.exists(directory):
@@ -19,10 +19,13 @@ def getSaved():
 
 def saveRecipe(name, url):
     saved = getSaved()
+    if name in saved:
+        return False
     saved[name] = url
     afile = open(savedLoc, 'wb')
     pickle.dump(saved, afile)
     afile.close()
+    return True
 
 def getSavedRecipe(name):
     saved = getSaved()
@@ -30,6 +33,13 @@ def getSavedRecipe(name):
         return saved[name]
     else:
         return None
+    
+def pretty_print_one(name, value):
+    return '{}- {}'.format(name, value)
+    
+def pretty_print():
+    saved = getSaved()
+    return '\n'.join((pretty_print_one(name, saved[name]) for name in saved.keys()))
     
 #saveRecipe('cheese', 'testing')
 #print(getSaved())

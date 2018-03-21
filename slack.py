@@ -7,6 +7,8 @@ from slackclient import SlackClient
 
 slack_client = SlackClient(os.environ.get('SLACK_TOKEN'))
 
+current_users = {}
+
 def parse_bot_commands(slack_events):
     """
         Parses a list of events coming from the Slack RTM API to find bot commands.
@@ -31,8 +33,9 @@ def parse_direct_mention(message_text):
     # the first group contains the username, the second group contains the remaining message
     return (matches.group(1), matches.group(2).strip()) if matches else (None, None)
 
-def handle_command(command, channel, user):
-    response = respond.get_response(command, channel, user)
+def handle_command(command, channel, userid):
+    username = current_users[userid]
+    response = respond.get_response(command, channel, userid, username)
     # Sends the response back to the channel
     slack_client.api_call(
         "chat.postMessage",
@@ -40,8 +43,16 @@ def handle_command(command, channel, user):
         text=response
     )
     
+def push_user(member):
+    current_users[member['id']] = member['name']
+    
+def parse_users():
+    members = slack_client.api_call('users.list')['members']
+    [push_user(mem) for mem in members]
+    
 if slack_client.rtm_connect(with_team_state=False):
         log.log("Starter Bot connected and running!")
+        parse_users()
         while True:
             msg = slack_client.rtm_read()
             command, channel, user = parse_bot_commands(msg)

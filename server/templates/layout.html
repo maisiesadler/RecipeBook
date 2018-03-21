@@ -1,0 +1,10 @@
+<!doctype html>
+<title>{% block title %}{% endblock %} | RB</title>
+<link rel=stylesheet href=/static/style.css type=text/css>
+<div class=box>
+  <h1><a href=/>Recipe Book</a></h1>
+  {% for link in links %}
+      <a href={{link.url}}>{{link.name}}</a>
+  {% endfor %}
+  {% block body %}{% endblock %}
+</div>

@@ -3,11 +3,11 @@ import persist
 import check_url
 import recent
 
-def open_browser(url, channel, user):
+def open_browser(url, channel, userid, username, savedName):
     webbrowser.open(url, new=2)
-    recent.commit(url, user, channel)
+    recent.commit(url, channel, userid, username, savedName)
 
-def get_response(command, channel, user):
+def get_response(command, channel, userid, username):
     """
         Executes bot command if the command is known
     """
@@ -20,12 +20,12 @@ def get_response(command, channel, user):
         if favUrl is None:
             url = openString[1:-1]
             if check_url.check_url(url):
-                open_browser(url, channel, user)
+                open_browser(url, channel, userid, username, None)
                 return "Opening, {}!".format(url)
             
             return "I don't recognise {}".format(openString)
         else:
-            open_browser(favUrl, channel, user)
+            open_browser(favUrl, channel, userid, username, openString)
             return "ok, opening {}".format(openString)
     if command.startswith('save'):
         parts = command.split(' ')
@@ -33,12 +33,20 @@ def get_response(command, channel, user):
         name = parts[1]
         url = parts[2][1:-1]
         if check_url.check_url(url):
-            persist.saveRecipe(name, url)
-            return "Saving {} as '{}'!".format(url, name)
+            saved = persist.saveRecipe(name, url)
+            if saved:
+                return "Saving {} as `{}`!".format(url, name)
+            else:
+                return "I cannot save this since you already have a saved recipe named `{}`".format(name)
         else:
             return "Cannot set invalid url"
-    if command.startswith('show recent'):
+    if command.startswith('get recent'):
         return recent.pretty_print()
+    if command.startswith('get saved'):
+        return persist.pretty_print()
+    if command.startswith('clear recent'):
+        recent.clear();
+        return 'Done!';
     
     # Default response is help text for the user
     return "Not sure what you mean. Try *{}*.".format('hi bot')

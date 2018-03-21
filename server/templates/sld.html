@@ -1,0 +1,9 @@
+{% extends "layout.html" %}
+{% block title %}Details about /{{ short_id }}{% endblock %}
+{% block body %}
+  {% for recipe in recipes %}
+  <p>
+      {{recipe}} - {{recipes[recipe]}}
+  </p>
+  {% endfor %}
+{% endblock %}
