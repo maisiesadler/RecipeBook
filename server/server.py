@@ -10,6 +10,7 @@ from werkzeug.serving import run_simple
 from jinja2 import Environment, FileSystemLoader
 import persist
 import recent
+import custom
 
 class RecipeServer():
     links = []
@@ -20,15 +21,17 @@ class RecipeServer():
                                      autoescape=True)
 
         self.url_map = Map([
-            Rule('/', endpoint='new_sreq'),
+            Rule('/', endpoint='homepage'),
             Rule('/recent', endpoint='view_recent'),
-            Rule('/clear', endpoint='clear_recent')
+            Rule('/clear', endpoint='clear_recent'),
+            Rule('/custom', endpoint='custom')
         ])
         
         self.links.append({'url': '/', 'name': 'Home'})
         self.links.append({'url': '/recent', 'name': 'Recent'})
+        self.links.append({'url': '/custom', 'name': 'Custom'})
         
-    def on_new_sreq(self, request):
+    def on_homepage(self, request):
         recipes=persist.getSaved()
         print(recipes)
         return self.render_template('sld.html',
@@ -47,6 +50,16 @@ class RecipeServer():
     def on_clear_recent(self, request):
         recent.clear()
         return Response('done')
+        
+    def on_custom(self, request):
+        c = custom.getSaved()
+        print(c)
+        recipes = []
+        [recipes.append({'name': s, 'val': c[s]}) for s in c.keys()]
+        return self.render_template('custom.html',
+            links = self.links,
+            recipes=recipes
+        )
 
     def render_template(self, template_name, **context):
         t = self.jinja_env.get_template(template_name)

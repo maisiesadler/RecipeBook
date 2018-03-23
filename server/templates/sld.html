@@ -1,9 +1,9 @@
 {% extends "layout.html" %}
-{% block title %}Details about /{{ short_id }}{% endblock %}
+{% block title %}Home Page{% endblock %}
 {% block body %}
   {% for recipe in recipes %}
   <p>
-      {{recipe}} - {{recipes[recipe]}}
+      <b>{{recipe}}</b> - <a href="{{recipes[recipe]}}" target="_blank">"{{recipes[recipe]}}"</a>
   </p>
   {% endfor %}
 {% endblock %}

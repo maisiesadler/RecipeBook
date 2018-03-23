@@ -1,0 +1,12 @@
+{% extends "layout.html" %}
+{% block title %}Custom Recipes{% endblock %}
+{% block body %}
+  {% for recipe in recipes %}
+  <p>
+      <h3>{{recipe.name}}</h3>
+      {% for line in recipe.val %}
+            <div>{{line}}</div>
+      {% endfor %}
+  </p>
+  {% endfor %}
+{% endblock %}

@@ -1,15 +1,16 @@
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.3/jquery.min.js"></script>
-<script type="text/javascript">
-    function clearRecent(){
-        $.ajax({
-            type: "GET",
-            url: "/clear",
-            success: function (data) {
-                location.reload()
-          },
-        });                
-    }
- </script>
+{% block head %}
+    <script type="text/javascript">
+        function clearRecent(){
+            $.ajax({
+                type: "GET",
+                url: "/clear",
+                success: function (data) {
+                    location.reload()
+              },
+            });                
+        }
+    </script>
+{% endblock %}
 
 {% extends "layout.html" %}
 {% block title %}Recent Urls{% endblock %}
@@ -20,10 +21,12 @@
       {% if recipe.time %}
           {{recipe.time.strftime("%Y-%m-%d %H:%M:%S")}} : 
       {% endif %}
-      {{recipe.url}}
+      <a href="{{recipe.url}}" target="_blank">{{recipe.url}}</a>
       {% if recipe.savedName %}
          <b> (Saved as {{recipe.savedName}})</b>
       {% endif %}
   </p>
   {% endfor %}
 {% endblock %}
+
+
