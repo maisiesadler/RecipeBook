@@ -2,6 +2,7 @@ import webbrowser
 import persist
 import check_url
 import recent
+import custom
 
 def open_browser(url, channel, userid, username, savedName):
     webbrowser.open(url, new=2)
@@ -13,6 +14,8 @@ def get_response(command, channel, userid, username):
     """
 
     # This is where you start to implement more commands!
+    if command.startswith('home'):
+        webbrowser.open('http://127.0.0.1:5000/', new=2)
     if command.startswith('open'):
         openString = command.split(' ')[1]
         
@@ -47,6 +50,20 @@ def get_response(command, channel, userid, username):
     if command.startswith('clear recent'):
         recent.clear();
         return 'Done!';
+    if command.startswith('add custom'):
+        name = command[11:]
+        canadd = custom.begin(name)
+        if canadd:
+            return 'ok...'
+        else:
+            return 'already exists'
+    if command.startswith('add item '):
+        item_to_add = command[9:]
+        custom.add(item_to_add)
+        return ''
+    if command.startswith('custom done'):
+        custom.done()
+        return 'done'
     
     # Default response is help text for the user
     return "Not sure what you mean. Try *{}*.".format('hi bot')
